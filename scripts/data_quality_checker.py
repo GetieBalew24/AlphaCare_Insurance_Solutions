@@ -1,6 +1,4 @@
 import pandas as pd
-import numpy as np
-
 class DataQualityChecker:
     """
     A class to perform data quality checks on a pandas DataFrame.
