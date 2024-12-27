@@ -78,3 +78,84 @@ class InsuranceEDA:
         plt.xlabel(col_x)
         plt.ylabel(col_y)
         plt.show()
+    
+    # Data Comparison: Trends over geography
+    def plot_trends_over_geography(self, df, trend_col, geography_col):
+        """
+        Plots a trend comparison over geographical locations using a box plot.
+
+        Args:
+            df (pd.DataFrame): The input DataFrame containing the data.
+            trend_col (str): The name of the column representing the trend to analyze.
+            geography_col (str): The name of the column representing geographical locations.
+
+        Returns:
+            None: Displays the box plot comparing trends across geographical locations.
+        """
+        plt.figure(figsize=(12, 8))
+        sns.boxplot(x=geography_col, y=trend_col, data=df)
+        plt.title(f'Trend of {trend_col} over {geography_col}')
+        plt.xticks(rotation=45)
+        plt.show()
+
+    # Outlier Detection: Box plots
+    def plot_outlier_detection(self, df, numerical_cols):
+        """
+        Detects and visualizes outliers for numerical columns using box plots.
+
+        Args:
+            df (pd.DataFrame): The input DataFrame containing the data.
+            numerical_cols (list of str): List of numerical column names to analyze.
+
+        Returns:
+            None: Displays box plots for each numerical column, arranged in a 3-column layout.
+        """
+        # Number of rows needed
+        n_cols = 3
+        n_rows = (len(numerical_cols) + n_cols - 1) // n_cols  # Calculate number of rows needed
+        # Create subplots
+        fig, axes = plt.subplots(n_rows, n_cols, figsize=(15, n_rows * 5))  # Adjust figure size
+        # Flatten axes array in case of multiple rows and columns
+        axes = axes.flatten()
+        # Loop through the numerical columns and plot each boxplot
+        for i, col in enumerate(numerical_cols):
+            sns.boxplot(x=df[col].dropna(), ax=axes[i])
+            axes[i].set_title(f'Box Plot for {col}')
+        # Remove empty subplots if any
+        for j in range(i + 1, len(axes)):
+            fig.delaxes(axes[j])
+        plt.tight_layout()
+        plt.show()
+    
+    # Creative Visualizations: Example plots
+    def create_creative_plots(self, df):
+        """
+        Generates creative visualizations to provide insights into the data.
+
+        Args:
+            df (pd.DataFrame): The input DataFrame containing the data.
+
+        Returns:
+            None: Displays multiple plots for different insights, including:
+                - Scatter plot with regression line
+                - Bar plot showing TotalClaims by VehicleType and Province
+                - Box plot showing the distribution of TotalClaims by TotalPremium
+        """
+        # Example: Scatter plot with regression line
+        plt.figure(figsize=(10, 8))
+        sns.regplot(x='SumInsured', y='CalculatedPremiumPerTerm', data=df, scatter_kws={'s': 10}, line_kws={'color': 'red'})
+        plt.title('SumInsured vs CalculatedPremiumPerTerm')
+        plt.show()
+
+        # Total claims by vehicle type and province
+        plt.figure(figsize=(10, 5))
+        sns.barplot(x='VehicleType', y='TotalClaims', hue='Province', data=df)
+        plt.title('TotalClaims by VehicleType and Province')
+        plt.xticks(rotation=45)
+        plt.show()
+
+        # Distribution of TotalClaims by TotalPremium
+        plt.figure(figsize=(10, 5))
+        sns.boxplot(x='TotalClaims', y='TotalPremium', data=df)
+        plt.title('Distribution of TotalClaims by TotalPremium')
+        plt.show()
