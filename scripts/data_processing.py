@@ -7,12 +7,24 @@ class DataPreprocessing:
         self.data = data
 
     def feature_engineering(self):
-        # Feature engineering logic...
-        self.data['VehicleAge'] = (pd.Timestamp.now() - self.data['VehicleIntroDate']).dt.days // 365
-        self.data['IsNewVehicle'] = self.data['NewVehicle'].apply(lambda x: 1 if x else 0)
-        self.data['ClaimsToPremiumRatio'] = self.data['TotalClaims'] / (self.data['TotalPremium'] + 1e-6)
-        return self.data
+        # Convert 'VehicleIntroDate' to datetime, handling errors gracefully
+        self.data['VehicleIntroDate'] = pd.to_datetime(self.data['VehicleIntroDate'], errors='coerce')
 
+        # Optionally handle rows with invalid or missing 'VehicleIntroDate'
+        # Option 1: Drop rows with missing 'VehicleIntroDate'
+        self.data = self.data.dropna(subset=['VehicleIntroDate'])
+
+        # Option 2: Or fill missing 'VehicleIntroDate' with the current date (if you prefer)
+        # self.data['VehicleIntroDate'] = self.data['VehicleIntroDate'].fillna(pd.Timestamp.now())
+
+        # Calculate 'VehicleAge' in years (based on the current date)
+        self.data['VehicleAge'] = (pd.Timestamp.now() - self.data['VehicleIntroDate']).dt.days // 365
+
+        # Continue with other feature engineering steps as required
+        # For example, creating additional features, encoding, etc.
+        # self.data['some_feature'] = ...
+
+        return self.data
     def handle_missing_values(self):
         # Handle missing values logic...
         for column in self.data.columns:
@@ -32,16 +44,20 @@ class DataPreprocessing:
                 self.data[col] = le.fit_transform(self.data[col])
         return self.data
 
-    def scale_data(self, method='standard'):
-        # Scale data logic...
+    def scale_data(self, method='standard'):      
+        # Select only numeric columns for scaling
+        numeric_cols = self.data.select_dtypes(include=["number"]).columns
         if method == 'standard':
             scaler = StandardScaler()
         elif method == 'minmax':
             scaler = MinMaxScaler()
         else:
-            raise ValueError("Unsupported scaling method.")
-        self.data = scaler.fit_transform(self.data)
+            raise ValueError(f"Unknown scaling method: {method}")
+        
+        # Apply scaling only to numeric columns
+        self.data[numeric_cols] = scaler.fit_transform(self.data[numeric_cols])
         return self.data
+
 
 def main():
     # Parsing command line arguments

@@ -1,0 +1,54 @@
+schema: '2.0'
+stages:
+  feature_engineering:
+    cmd: "python3 scripts/data_processing.py --stage preprocess --input data/raw/MachineLearningRating_v3.csv
+      --output data/preprocessed/feature_engineered_data.csv\n"
+    deps:
+    - path: data/raw/MachineLearningRating_v3.csv
+      hash: md5
+      md5: b5ac7db72f1138db45089cf81fd36b33
+      size: 527314004
+    outs:
+    - path: data/preprocessed/feature_engineered_data.csv
+      hash: md5
+      md5: 3471b8173a9e1956c3963e62ca04af04
+      size: 538867628
+  handle_missing_values:
+    cmd: "python3 scripts/data_processing.py --stage handle_missing_values --input
+      data/preprocessed/feature_engineered_data.csv --output data/preprocessed/no_missing_values.csv\n"
+    deps:
+    - path: data/preprocessed/feature_engineered_data.csv
+      hash: md5
+      md5: 3471b8173a9e1956c3963e62ca04af04
+      size: 538867628
+    outs:
+    - path: data/preprocessed/no_missing_values.csv
+      hash: md5
+      md5: fa832e5bb8dbd8cb0fe9e81d52a4ce3c
+      size: 564427014
+  encode_data:
+    cmd: "python3 scripts/data_processing.py --stage encode_data --input data/preprocessed/no_missing_values.csv
+      --output data/preprocessed/encoded_data.csv\n"
+    deps:
+    - path: data/preprocessed/no_missing_values.csv
+      hash: md5
+      md5: fa832e5bb8dbd8cb0fe9e81d52a4ce3c
+      size: 564427014
+    outs:
+    - path: data/preprocessed/encoded_data.csv
+      hash: md5
+      md5: 54caf7f604f152682c489a5f206f8210
+      size: 547434736
+  scale_data:
+    cmd: "python3 scripts/data_processing.py --stage scale_data --input data/preprocessed/encoded_data.csv
+      --output data/preprocessed/scaled_data.csv\n"
+    deps:
+    - path: data/preprocessed/encoded_data.csv
+      hash: md5
+      md5: 54caf7f604f152682c489a5f206f8210
+      size: 547434736
+    outs:
+    - path: data/preprocessed/scaled_data.csv
+      hash: md5
+      md5: 58fa2f63956317e3080346577897232c
+      size: 760817728
