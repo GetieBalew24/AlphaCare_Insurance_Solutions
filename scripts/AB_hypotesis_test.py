@@ -15,3 +15,11 @@ class ABHypothesisTester:
         group_A = df[df['Gender'] == 'Male']
         group_B = df[df['Gender'] == 'Female']
         return group_A, group_B
+     # Perform Hypothesis Testing for ZipCode
+    def create_zipcode_groups(self, df):
+        # Define a threshold or specific zip codes for grouping
+        zipcodes = df['PostalCode'].unique()
+        mid_index = len(zipcodes) // 2
+        group_A = df[df['PostalCode'].isin(zipcodes[:mid_index])]
+        group_B = df[df['PostalCode'].isin(zipcodes[mid_index:])]
+        return group_A, group_B
