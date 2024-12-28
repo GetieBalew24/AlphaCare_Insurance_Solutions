@@ -23,3 +23,16 @@ class ABHypothesisTester:
         group_A = df[df['PostalCode'].isin(zipcodes[:mid_index])]
         group_B = df[df['PostalCode'].isin(zipcodes[mid_index:])]
         return group_A, group_B
+       # Hypothesis Testing Function
+    def hypothesis_test(self, group_A, group_B, column, test_type='t'):
+        if test_type == 't':
+            # T-test for numerical data
+            t_stat, p_value = stats.ttest_ind(group_A[column].dropna(), group_B[column].dropna())
+        elif test_type == 'chi2':
+            # Chi-Squared test for categorical data
+            contingency_table = pd.crosstab(group_A[column].dropna(), group_B[column].dropna())
+            chi2_stat, p_value, _, _ = stats.chi2_contingency(contingency_table)
+        else:
+            raise ValueError("Unsupported test type. Use 't' for t-test or 'chi2' for chi-squared test.")
+        
+        return p_value
