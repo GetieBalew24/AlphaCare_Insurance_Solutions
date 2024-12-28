@@ -104,3 +104,32 @@ class ABHypothesisTester:
             raise ValueError("Unsupported test type. Use 't' for t-test or 'chi2' for chi-squared test.")
         
         return p_value
+    def report_results(self, p_value, test_name):
+        """
+        Reports the results of a hypothesis test based on the p-value.
+
+        Parameters:
+        ----------
+        p_value : float
+            The p-value obtained from the hypothesis test.
+        test_name : str
+            The name of the test being performed (e.g., "T-test for Gender").
+
+        Returns:
+        -------
+        None:
+            Prints the test result and conclusion (whether to reject or fail to reject the null hypothesis).
+
+        Notes:
+        ------
+        A p-value threshold of 0.05 is used:
+        - If p-value < 0.05, the null hypothesis is rejected.
+        - If p-value >= 0.05, the null hypothesis is not rejected.
+        """
+        if p_value < 0.05:
+            result = "Reject the null hypothesis"
+        else:
+            result = "Fail to reject the null hypothesis"
+        
+        print(f"{test_name}: p-value = {p_value:.4f} -> {result}")
+
