@@ -57,3 +57,20 @@ class StatisticalModel:
             print(f"Mean Squared Error: {predictions[zipcode]['mse']:.4f}")
         
         return models, predictions
+    def split_data(self, X, y, test_size=0.2, random_state=42):
+        """
+        Splits the dataset into training and testing sets.
+        
+        Parameters:
+        - X: Features data
+        - y: Target data
+        - test_size: Proportion of the dataset to include in the test split
+        - random_state: Seed for the random number generator
+
+        Returns:
+        - X_train: Training features
+        - X_test: Testing features
+        - y_train: Training target
+        - y_test: Testing target
+        """
+        return train_test_split(X, y, test_size=test_size, random_state=random_state)
