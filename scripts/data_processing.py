@@ -6,7 +6,7 @@ class DataPreprocessing:
     def __init__(self, data):
         self.data = data
 
-    def feature_engineering(self):
+    def feature_engineering(self,data):
         # Convert 'VehicleIntroDate' to datetime, handling errors gracefully
         self.data['VehicleIntroDate'] = pd.to_datetime(self.data['VehicleIntroDate'], errors='coerce')
 
@@ -24,15 +24,15 @@ class DataPreprocessing:
         # For example, creating additional features, encoding, etc.
         # self.data['some_feature'] = ...
 
-        return self.data
-    def handle_missing_values(self):
+        return data
+    def handle_missing_values(self,data):
         # Handle missing values logic...
         for column in self.data.columns:
             if self.data[column].dtype in ['float64', 'int64']:
                 self.data[column].fillna(self.data[column].mean(), inplace=True)
             elif self.data[column].dtype == 'object':
                 self.data[column].fillna(self.data[column].mode()[0], inplace=True)
-        return self.data
+        return data
 
     def encode_categorical_data(self, method, columns):
         # Encode categorical data logic...
