@@ -118,3 +118,66 @@ class StatisticalModel:
         xgb_model.fit(X_train, y_train)
         
         return lr_model, rfr_model, xgb_model
+    def evaluate_model(self, model, X_test, y_test):
+        """
+        Evaluates the performance of a model using test data.
+        
+        Parameters:
+        - model: The trained model to evaluate
+        - X_test: Testing features
+        - y_test: Testing target
+        
+        Returns:
+        - mae: Mean Absolute Error of the model
+        - mse: Mean Squared Error of the model
+        - r2: R-squared Score of the model
+        - y_pred: Predictions made by the model
+        """
+        # Make predictions
+        y_pred = model.predict(X_test)
+        
+        # Calculate evaluation metrics
+        mae = mean_absolute_error(y_test, y_pred)
+        mse = mean_squared_error(y_test, y_pred)
+        r2 = r2_score(y_test, y_pred)
+        
+        return mae, mse, r2, y_pred
+    def plot_metrics(self, models, mae_scores, mse_scores, r2_scores):
+        """
+        Plots comparison metrics for different models.
+        
+        Parameters:
+        - models: List of model names
+        - mae_scores: List of Mean Absolute Error scores for each model
+        - mse_scores: List of Mean Squared Error scores for each model
+        - r2_scores: List of R-squared scores for each model
+        """
+        # Plot Mean Absolute Error (MAE) scores
+        plt.figure(figsize=(10, 6))
+        plt.bar(models, mae_scores, color='skyblue')
+        plt.xlabel('Models')
+        plt.ylabel('Mean Absolute Error (MAE)')
+        plt.title('Comparison of MAE Scores')
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.show()
+
+        # Plot Mean Squared Error (MSE) scores
+        plt.figure(figsize=(10, 6))
+        plt.bar(models, mse_scores, color='lightgreen')
+        plt.xlabel('Models')
+        plt.ylabel('Mean Squared Error (MSE)')
+        plt.title('Comparison of MSE Scores')
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.show()
+
+        # Plot R-squared scores
+        plt.figure(figsize=(10, 6))
+        plt.bar(models, r2_scores, color='salmon')
+        plt.xlabel('Models')
+        plt.ylabel('R-squared Score')
+        plt.title('Comparison of R-squared Scores')
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.show()
