@@ -181,3 +181,25 @@ class StatisticalModel:
         plt.xticks(rotation=45)
         plt.tight_layout()
         plt.show()
+    def analyze_feature_importance_shap(model, X_train):
+        """
+        Analyze feature importance using SHAP.
+
+        Parameters:
+        - model: The trained model to explain
+        - X_train: Training features used to fit the model
+        
+        Returns:
+        - shap_values: SHAP values for the features
+        """
+        # Create a SHAP explainer
+        explainer = shap.Explainer(model, X_train)
+        
+        # Calculate SHAP values
+        shap_values = explainer(X_train)
+        
+        # Summary plot
+        shap.summary_plot(shap_values, X_train)
+        
+        return shap_values
+    
