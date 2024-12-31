@@ -94,3 +94,27 @@ class StatisticalModel:
         - y_test: Testing target
         """
         return train_test_split(X, y, test_size=test_size, random_state=random_state)
+    def train_models(self, X_train, y_train):
+        """
+        Trains multiple regression models on the provided training data.
+        
+        Parameters:
+        - X_train: Training features
+        - y_train: Training target
+        
+        Returns:
+        - lr_model: Trained Linear Regression model
+        - rfr_model: Trained Random Forest Regressor model
+        - xgb_model: Trained XGBoost Regressor model
+        """
+        # Initialize models
+        lr_model = LinearRegression()
+        rfr_model = RandomForestRegressor(random_state=42)
+        xgb_model = xgb.XGBRegressor(random_state=42)
+        
+        # Train models
+        lr_model.fit(X_train, y_train)
+        rfr_model.fit(X_train, y_train)
+        xgb_model.fit(X_train, y_train)
+        
+        return lr_model, rfr_model, xgb_model
